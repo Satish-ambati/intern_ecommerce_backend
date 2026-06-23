@@ -26,7 +26,9 @@ public class AuthenticationService {
         try{
             Optional<User> u1 = userRepository.findById(user.getEmail());
             if(u1.isPresent()){
-                return new ResponseEntity<>("email already exists", HttpStatus.FOUND);
+                // 302 FOUND is a redirect — wrong status for "already exists"
+                // 409 CONFLICT is the correct HTTP status here
+                return new ResponseEntity<>("Email already exists", HttpStatus.CONFLICT);
             }
             user.setPassword(encoder.encode(user.getPassword()));
             userRepository.save(user);
@@ -36,11 +38,18 @@ public class AuthenticationService {
         }
     }
     public ResponseEntity<String> VerifyUser(String email, String password) {
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email
-        ,password));
-        if(authentication.isAuthenticated()){
-            return new ResponseEntity<>(jwtService.geneteToken(email),HttpStatus.OK);
+        try {
+            // authenticate() throws BadCredentialsException if email/password is wrong
+            // so we MUST wrap it in try-catch — the if-block below never runs on failure
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(email, password));
+            if (authentication.isAuthenticated()) {
+                return new ResponseEntity<>(jwtService.geneteToken(email), HttpStatus.OK);
+            }
+            return new ResponseEntity<>("Authentication failed", HttpStatus.UNAUTHORIZED);
+        } catch (Exception e) {
+            // Wrong password or user not found lands here
+            return new ResponseEntity<>("Invalid email or password", HttpStatus.UNAUTHORIZED);
         }
-        return new ResponseEntity<>("No Found",HttpStatus.NOT_FOUND);
     }
 }

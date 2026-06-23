@@ -97,7 +97,13 @@ public class CartService {
             return new ResponseEntity<>(
                     HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(user.get().getCart(),HttpStatus.OK);
+        Cart cart = user.get().getCart();
+        // If user exists but has never added anything, cart will be null
+        // Return 204 No Content instead of sending null in the response body
+        if (cart == null) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(cart, HttpStatus.OK);
     }
     public ResponseEntity<String> updateQuantity(
             long cartItemId,

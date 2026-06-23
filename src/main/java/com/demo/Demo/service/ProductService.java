@@ -34,7 +34,8 @@ public class ProductService {
     public ResponseEntity<Product> updateProduct(long id, Product product) {
         Optional<Product> existing = productRepository.findById(id);
         if(existing.isEmpty()){
-            return new ResponseEntity<>(new Product(),HttpStatus.NOT_FOUND);
+            // Don't send an empty Product object — just send the 404 status with no body
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         Product p = existing.get();
         p.setProductName(product.getProductName());

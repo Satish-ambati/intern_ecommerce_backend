@@ -1,6 +1,7 @@
 package com.demo.Demo.model;
 
 import com.demo.Demo.enums.Role;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -19,6 +20,7 @@ public class User {
     @Enumerated(EnumType.STRING)
     public Role role;
 
+    @JsonIgnore  // Breaks the loop: Cart → User → Cart → User → ...
     @OneToOne(mappedBy = "user",cascade = CascadeType.ALL)
     private Cart cart;
 }
