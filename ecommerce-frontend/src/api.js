@@ -8,4 +8,4 @@
 //   import { API } from '../api.js'
 //   await axios.get(`${API}/products/all`, ...)
 
-export const API = "http://192.168.10.19:8080"
+export const API = "http://localhost:8080"

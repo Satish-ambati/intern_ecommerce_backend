@@ -6,12 +6,10 @@ import { useNavigate } from 'react-router-dom'
 function Navbar() {
   // useNavigate lets us go to a different page when a button is clicked
   const navigate = useNavigate()
-
   // Check if someone is logged in by looking at localStorage
   // After login, we saved the token and email in localStorage
   const token = localStorage.getItem('token')
   const userEmail = localStorage.getItem('userEmail')
-
   // This function logs the user out
   const logout = () => {
     // Remove the saved token and email from browser storage

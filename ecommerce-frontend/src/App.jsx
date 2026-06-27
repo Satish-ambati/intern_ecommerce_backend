@@ -2,7 +2,6 @@
 // Routing means: which URL shows which page
 
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-
 // Import our pages
 import Login from './pages/Login.jsx'
 import Register from './pages/Register.jsx'
@@ -38,12 +37,10 @@ function App() {
 
         {/* Admin panel (only admins should use this) */}
         <Route path="/admin" element={<AdminProducts />} />
-
         {/* Product detail page - :id means any product ID */}
         {/* Example: /product/1, /product/2, /product/5 */}
         <Route path="/product/:id" element={<ProductDetail />} />
       </Routes>
-
       {/* Footer shows on every page */}
       <Footer />
     </BrowserRouter>

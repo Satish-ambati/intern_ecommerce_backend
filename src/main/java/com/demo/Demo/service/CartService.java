@@ -23,7 +23,6 @@ public class CartService {
     private ProductRepository productRepository;
     @Autowired
     private CartItemRepository cartItemRepository;
-
     public ResponseEntity<String> addToCart(
             String email,
             long productId,
@@ -32,7 +31,6 @@ public class CartService {
         if (u1.isEmpty()) {
             return new ResponseEntity<>("User Not Found",HttpStatus.NOT_FOUND);
         }
-
         Optional<Product> pd = productRepository.findById(productId);
         if (pd.isEmpty()) {
             return new ResponseEntity<>("Product Not Found",HttpStatus.NOT_FOUND);
